@@ -1,4 +1,6 @@
 # Hermes config.yaml 示例
+# 安装脚本会复制到 ~/.hermes/config.yaml。已有配置时不会覆盖。
+
 model:
   provider: openrouter
   default: anthropic/claude-sonnet-4
