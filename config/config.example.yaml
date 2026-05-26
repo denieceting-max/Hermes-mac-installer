@@ -1,0 +1,15 @@
+# Hermes config.yaml 示例
+model:
+  provider: openrouter
+  default: anthropic/claude-sonnet-4
+
+agent:
+  max_turns: 90
+
+terminal:
+  backend: local
+  timeout: 180
+
+memory:
+  memory_enabled: true
+  user_profile_enabled: true
