@@ -70,7 +70,7 @@ mkdir -p "$HERMES_HOME/logs"
 if [[ ! -f "$HERMES_HOME/.env" ]]; then
   cp "$ROOT_DIR/config/.env.example" "$HERMES_HOME/.env"
   chmod 600 "$HERMES_HOME/.env"
-  info "已创建 $HERMES_HOME/.env，请填写 API Key 和钉钉 Client Secret"
+  info "已创建 $HERMES_HOME/.env，请填写模型 API Key"
 else
   warn "$HERMES_HOME/.env 已存在，未覆盖"
 fi
@@ -97,16 +97,22 @@ cat <<'NEXT'
 
 下一步：
 1. nano ~/.hermes/.env
-2. 填写模型 API Key、DINGTALK_CLIENT_ID、DINGTALK_CLIENT_SECRET、DINGTALK_ALLOWED_USERS
+2. 填写模型 API Key，例如 OPENROUTER_API_KEY
 3. hermes setup
 4. hermes status --all
-5. hermes gateway run
+5. bash scripts/start_dashboard.sh
 
-前台测试成功后，长期后台运行：
+打开浏览器聊天页面：
 cd ~/Hermes
-bash scripts/start_gateway_tmux.sh
+bash scripts/start_dashboard.sh
 
 检查状态：
-bash scripts/check_gateway.sh
+bash scripts/check_dashboard.sh
+
+可选：让 Dashboard 开机自启动：
+bash scripts/install_dashboard_launch_agent.sh
+
+可选：创建桌面/应用快捷方式：
+bash scripts/create_dashboard_shortcut.sh
 
 NEXT

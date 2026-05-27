@@ -1,52 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LABEL="com.hermes.gateway"
-PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
-LOG_DIR="$HOME/.hermes/logs"
+cat <<'MSG'
+提示：install_launch_agent.sh 是旧脚本名。
 
-export PATH="$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:$PATH"
-mkdir -p "$HOME/Library/LaunchAgents" "$LOG_DIR"
-HERMES_BIN="$(command -v hermes || true)"
+现在默认推荐启动 Hermes Dashboard，也就是浏览器聊天页面：
+  bash scripts/install_dashboard_launch_agent.sh
 
-if [[ -z "$HERMES_BIN" ]]; then
-  echo "未找到 hermes。请先执行：cd ~/Hermes && bash scripts/install_mac.sh"
-  exit 1
-fi
+如果你明确要连接钉钉 gateway，再执行：
+  bash scripts/install_gateway_launch_agent.sh
+MSG
 
-cat > "$PLIST" <<PLIST
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-  <key>Label</key>
-  <string>$LABEL</string>
-  <key>ProgramArguments</key>
-  <array>
-    <string>/bin/zsh</string>
-    <string>-lc</string>
-    <string>export PATH="\$HOME/.local/bin:/opt/homebrew/bin:/usr/local/bin:\$PATH"; "$HERMES_BIN" gateway run</string>
-  </array>
-  <key>RunAtLoad</key>
-  <true/>
-  <key>KeepAlive</key>
-  <true/>
-  <key>WorkingDirectory</key>
-  <string>$HOME</string>
-  <key>StandardOutPath</key>
-  <string>$LOG_DIR/launchd-gateway.out.log</string>
-  <key>StandardErrorPath</key>
-  <string>$LOG_DIR/launchd-gateway.err.log</string>
-</dict>
-</plist>
-PLIST
-
-launchctl unload "$PLIST" >/dev/null 2>&1 || true
-launchctl load "$PLIST"
-launchctl start "$LABEL" || true
-
-echo "已安装并启动开机自启动：$LABEL"
-echo "配置文件：$PLIST"
-echo "日志：$LOG_DIR/launchd-gateway.out.log 和 $LOG_DIR/launchd-gateway.err.log"
-echo
-launchctl list | grep "$LABEL" || true
+exit 1

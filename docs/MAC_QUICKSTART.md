@@ -1,6 +1,6 @@
 # Mac 快速操作清单
 
-适合在新 Mac 上照着执行。
+目标：不用打开终端也能和 Hermes 对话。安装完成后用浏览器打开 Hermes Dashboard。
 
 ## 1. 下载安装包
 
@@ -24,20 +24,19 @@ cd ~/Hermes
 bash scripts/install_mac.sh
 ```
 
-## 2. 填写密钥
+## 2. 填写模型密钥
 
 ```bash
 nano ~/.hermes/.env
 ```
 
-至少填写：
+至少填写一个模型 API Key，例如：
 
 ```env
 OPENROUTER_API_KEY=你的模型APIKey
-DINGTALK_CLIENT_ID=你的钉钉应用ClientID或AppKey
-DINGTALK_CLIENT_SECRET=你的钉钉应用ClientSecret或AppSecret
-DINGTALK_ALLOWED_USERS=*
 ```
+
+不用钉钉时，`DINGTALK_CLIENT_ID`、`DINGTALK_CLIENT_SECRET` 可以保持空白。
 
 保存 nano：按 `Ctrl+O`，回车，再按 `Ctrl+X`。
 
@@ -50,51 +49,55 @@ hermes model
 hermes status --all
 ```
 
-## 4. 前台测试钉钉网关
-
-```bash
-hermes gateway run
-```
-
-看到 `Connected via Stream Mode` 后，到钉钉里给机器人发消息测试。测试成功后按 `Ctrl+C` 停止。
-
-## 5. 后台长期运行
+## 4. 启动浏览器聊天页面
 
 ```bash
 cd ~/Hermes
-bash scripts/start_gateway_tmux.sh
-bash scripts/check_gateway.sh
+bash scripts/start_dashboard.sh
 ```
 
-进入后台会话：
+打开：
 
-```bash
-tmux attach -t hermes-gateway
+```text
+http://127.0.0.1:9119
 ```
 
-退出 tmux 但保持运行：先按 `Ctrl+B`，再按 `D`。
-
-## 6. 可选：开机自启动
-
-确认后台运行稳定后：
+## 5. 设置开机自启动
 
 ```bash
 cd ~/Hermes
-bash scripts/install_launch_agent.sh
+bash scripts/install_dashboard_launch_agent.sh
 ```
 
 取消自启动：
 
 ```bash
 cd ~/Hermes
-bash scripts/uninstall_launch_agent.sh
+bash scripts/uninstall_dashboard_launch_agent.sh
 ```
+
+## 6. 创建应用快捷方式
+
+```bash
+cd ~/Hermes
+bash scripts/create_dashboard_shortcut.sh
+```
+
+以后可以在 Finder 的 Applications 或 Spotlight 搜索 `Hermes Dashboard` 打开。
 
 ## 7. 常用排查命令
 
 ```bash
-bash ~/Hermes/scripts/check_gateway.sh
-tmux capture-pane -t hermes-gateway -p | tail -80
-tail -100 ~/.hermes/logs/gateway.log
-launchctl list | grep hermes
+bash ~/Hermes/scripts/check_dashboard.sh
+tail -100 ~/.hermes/logs/dashboard.log
+tail -100 ~/.hermes/logs/dashboard-launchd.err.log
+```
+
+## 8. 可选钉钉
+
+只想用浏览器聊天时，不需要启动钉钉 gateway。以后需要钉钉时再手动执行：
+
+```bash
+cd ~/Hermes
+bash scripts/start_gateway_tmux.sh
 ```

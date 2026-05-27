@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-LABEL="com.hermes.gateway"
-PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
+cat <<'MSG'
+提示：uninstall_launch_agent.sh 是旧脚本名。
 
-if [[ -f "$PLIST" ]]; then
-  launchctl stop "$LABEL" >/dev/null 2>&1 || true
-  launchctl unload "$PLIST" >/dev/null 2>&1 || true
-  rm -f "$PLIST"
-  echo "已卸载开机自启动：$LABEL"
-else
-  echo "未找到开机自启动配置：$PLIST"
-fi
+取消 Hermes Dashboard 开机自启动：
+  bash scripts/uninstall_dashboard_launch_agent.sh
 
-launchctl list | grep "$LABEL" || true
+取消钉钉 gateway 开机自启动：
+  bash scripts/uninstall_gateway_launch_agent.sh
+MSG
+
+exit 1
